@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
-import { ArrowLeft, ArrowRight, Briefcase, Building2, CheckCircle, DollarSign, Globe, Mail, Shield, User, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Briefcase, Building2, CheckCircle, DollarSign, Globe, Mail, Shield, User, UserPlus, Users } from "lucide-react";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 

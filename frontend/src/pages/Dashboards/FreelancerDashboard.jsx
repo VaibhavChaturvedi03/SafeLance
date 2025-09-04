@@ -1,4 +1,4 @@
-import { BarChart3, Briefcase, DollarSign, Edit, Folder, Globe, Grid3X3, MessageSquare, Plus, Settings, Star, Target, Trash2, TrendingUp, Upload, X } from "lucide-react";
+import { BarChart3, Briefcase, DollarSign, Edit, Folder, Globe, Grid3X3, MessageSquare, Plus, Settings, Star, Target, Trash2, TrendingUp, Upload, X, Zap } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
 import { Link } from "react-router-dom";

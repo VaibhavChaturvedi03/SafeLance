@@ -1,4 +1,8 @@
 import { useState } from "react";
+import Navigation from "./Navigation";
+import { Input } from "../components/Input";
+import { ArrowLeft, ArrowRight, Clock, DollarSign, Send, Upload } from "lucide-react";
+import { Button } from "../components/Button";
 
 const PostJobPage = () => {
   const [jobData, setJobData] = useState({

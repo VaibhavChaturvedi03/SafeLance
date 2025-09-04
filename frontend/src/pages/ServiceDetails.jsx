@@ -3,7 +3,7 @@ import { mockServices } from "../data/mockservices";
 import { mockFreelancers } from "../data/mockFreelancers";
 import Navigation from "./Navigation";
 import { Button } from "../components/Button";
-import { MessageCircle } from "lucide-react";
+import { MessageCircle, Star } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/Avatar";
 
 const ServiceDetailPage = () => {
