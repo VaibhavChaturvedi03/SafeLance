@@ -1,35 +1,39 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+
 import './App.css'
+import HomePage from './pages/HomePage';
+import LoginPage from "./pages/Auth/Login";
+import SignupPage from "./pages/Auth/SignUp";
+import BrowseFreelancersPage from './pages/BrowserFreelancer';
+import ServicesPage from './pages/Services';
+import ServiceDetailPage from './pages/ServiceDetails';
+import FreelancerProfilePage from './pages/FreelancerProfile';
+import PostJobPage from './pages/PostJob';
+import MessagesPage from './pages/MessagePage';
+import AboutPage from './pages/About';
+import DashboardPage from './pages/Dashboards/Dashboard';
+import { AuthProvider } from './context/AuthProvider';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="App">
+      <AuthProvider>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/browse" element={<BrowseFreelancersPage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/service/:id" element={<ServiceDetailPage />} />
+          <Route path="/freelancer/:id" element={<FreelancerProfilePage />} />
+          <Route path="/post-job" element={<PostJobPage />} />
+          <Route path="/messages" element={<MessagesPage />} />
+          {/* <Route path="/how-it-works" element={<HowItWorksPage />} /> */}
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+        </Routes>
+      </AuthProvider>
+    </div>
+  );
+};
 
-export default App
+export default App;
