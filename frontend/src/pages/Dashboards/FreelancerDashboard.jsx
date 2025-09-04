@@ -1,0 +1,638 @@
+import { BarChart3, Briefcase, DollarSign, Folder, Target } from "lucide-react";
+import { useState } from "react";
+import { useAuth } from "../../context/AuthProvider";
+
+const FreelancerDashboard = () => {
+  const { user } = useAuth();
+  const [activeView, setActiveView] = useState('overview');
+  const [recentOrders] = useState([
+    { 
+      id: 1, 
+      title: "E-commerce Platform Development", 
+      client: "TechCorp Inc.", 
+      clientAvatar: "https://images.unsplash.com/photo-1670851810697-68ddb4ecae1c?w=100&h=100&fit=crop&crop=face",
+      earnings: 2800, 
+      status: "Completed", 
+      rating: 5, 
+      deadline: "2025-01-25",
+      description: "Modern e-commerce platform with payment integration"
+    },
+    { 
+      id: 2, 
+      title: "Mobile App UI Design", 
+      client: "StartupXYZ", 
+      clientAvatar: "https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=100&h=100&fit=crop&crop=face",
+      earnings: 1500, 
+      status: "In Progress", 
+      rating: null, 
+      deadline: "2025-02-10",
+      description: "Complete mobile app design system"
+    },
+    { 
+      id: 3, 
+      title: "Brand Identity Package", 
+      client: "Creative Co.", 
+      clientAvatar: "https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?w=100&h=100&fit=crop&crop=face",
+      earnings: 900, 
+      status: "In Review", 
+      rating: null, 
+      deadline: "2025-02-05",
+      description: "Complete brand identity and style guide"
+    }
+  ]);
+
+  const [skills] = useState([
+    { name: "React Development", level: 95, projects: 45, category: "Frontend", color: "from-blue-500 to-blue-600" },
+    { name: "UI/UX Design", level: 88, projects: 32, category: "Design", color: "from-purple-500 to-purple-600" },
+    { name: "Node.js", level: 82, projects: 28, category: "Backend", color: "from-green-500 to-green-600" },
+    { name: "Python", level: 78, projects: 25, category: "Backend", color: "from-yellow-500 to-yellow-600" }
+  ]);
+
+  const [portfolio, setPortfolio] = useState([
+    { 
+      id: 1, 
+      title: "E-commerce Dashboard", 
+      category: "Web Development", 
+      image: "https://images.unsplash.com/photo-1657697071046-1eef624e96e9?w=400&h=300&fit=crop",
+      description: "Modern admin dashboard for e-commerce management",
+      technologies: ["React", "Node.js", "MongoDB"],
+      link: "https://example.com"
+    },
+    { 
+      id: 2, 
+      title: "Mobile Banking App", 
+      category: "UI/UX Design", 
+      image: "https://images.unsplash.com/photo-1753162657289-6569cd1da479?w=400&h=300&fit=crop",
+      description: "Clean and intuitive mobile banking interface",
+      technologies: ["Figma", "Principle", "After Effects"],
+      link: "https://example.com"
+    },
+    { 
+      id: 3, 
+      title: "SaaS Landing Page", 
+      category: "Web Development", 
+      image: "https://images.unsplash.com/photo-1590650467980-8eadfa86ff48?w=400&h=300&fit=crop",
+      description: "High-converting landing page for SaaS product",
+      technologies: ["React", "Tailwind", "Framer Motion"],
+      link: "https://example.com"
+    }
+  ]);
+
+  const [showAddPortfolio, setShowAddPortfolio] = useState(false);
+  const [newPortfolioItem, setNewPortfolioItem] = useState({
+    title: "",
+    category: "",
+    description: "",
+    technologies: "",
+    link: ""
+  });
+
+  const handleAddPortfolio = (e) => {
+    e.preventDefault();
+    const newItem = {
+      id: portfolio.length + 1,
+      ...newPortfolioItem,
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop",
+      technologies: newPortfolioItem.technologies.split(',').map(t => t.trim())
+    };
+    setPortfolio([...portfolio, newItem]);
+    setNewPortfolioItem({ title: "", category: "", description: "", technologies: "", link: "" });
+    setShowAddPortfolio(false);
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'Completed': return 'bg-green-100/80 text-green-800';
+      case 'In Progress': return 'bg-blue-100/80 text-blue-800';
+      case 'In Review': return 'bg-yellow-100/80 text-yellow-800';
+      default: return 'bg-gray-100/80 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-teal-50/50 to-green-50/50"></div>
+      <div className="absolute inset-0" style={{
+        backgroundImage: `radial-gradient(circle at 25px 25px, rgba(209, 250, 229, 0.4) 2px, transparent 0)`,
+        backgroundSize: '50px 50px'
+      }}></div>
+      
+      {/* Enhanced Navigation */}
+      <nav className="bg-white/10 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-lg shadow-emerald-500/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center space-x-8">
+              <Link to="/">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Safelance</h1>
+              </Link>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
+                <Zap className="h-4 w-4 text-emerald-600" />
+                <span className="text-slate-700 font-medium">{user?.name}</span>
+              </div>
+              <Button variant="ghost" size="sm" onClick={() => {}} className="bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20">
+                <Settings className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Dashboard Header */}
+        <div className="mb-8">
+          <div className="bg-white/20 backdrop-blur-xl rounded-3xl p-8 shadow-2xl shadow-emerald-500/20 border border-white/30">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
+                  Welcome back, {user?.name}! 🚀
+                </h1>
+                <p className="text-slate-600 text-lg">Grow your freelance business and showcase your talent</p>
+              </div>
+              <div className="hidden md:flex space-x-4">
+                <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create Gig
+                </Button>
+                <Button variant="outline" className="bg-white/30 backdrop-blur-sm border-white/30 hover:bg-white/40">
+                  <Edit className="h-4 w-4 mr-2" />
+                  Edit Profile
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Dashboard Navigation */}
+        <div className="mb-8">
+          <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-2 shadow-xl border border-white/30">
+            <div className="flex space-x-2">
+              {[
+                { id: 'overview', label: 'Overview', icon: BarChart3 },
+                { id: 'projects', label: 'Projects', icon: Briefcase },
+                { id: 'portfolio', label: 'Portfolio', icon: Folder },
+                { id: 'skills', label: 'Skills', icon: Target },
+                { id: 'earnings', label: 'Earnings', icon: DollarSign }
+              ].map((tab) => {
+                const IconComponent = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveView(tab.id)}
+                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
+                      activeView === tab.id
+                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg'
+                        : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
+                    }`}
+                  >
+                    <IconComponent className="h-4 w-4" />
+                    <span className="hidden sm:inline">{tab.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* Overview Tab */}
+        {activeView === 'overview' && (
+          <div className="space-y-8">
+            {/* Stats Cards */}
+            <div className="grid md:grid-cols-4 gap-6">
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 shadow-xl shadow-emerald-500/10 border border-white/30 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300 group">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <Grid3X3 className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-slate-700 mb-2">Active Gigs</h3>
+                  <p className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">3</p>
+                  <p className="text-sm text-slate-500 mt-1">1 new this week</p>
+                </div>
+              </div>
+
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 shadow-xl shadow-green-500/10 border border-white/30 hover:shadow-2xl hover:shadow-green-500/20 transition-all duration-300 group">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <TrendingUp className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-slate-700 mb-2">Monthly Revenue</h3>
+                  <p className="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">$5.2K</p>
+                  <p className="text-sm text-slate-500 mt-1">+38% from last month</p>
+                </div>
+              </div>
+
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 shadow-xl shadow-yellow-500/10 border border-white/30 hover:shadow-2xl hover:shadow-yellow-500/20 transition-all duration-300 group">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-yellow-500 to-amber-600 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <Target className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-slate-700 mb-2">Projects Completed</h3>
+                  <p className="text-3xl font-bold bg-gradient-to-r from-yellow-600 to-amber-600 bg-clip-text text-transparent">47</p>
+                  <p className="text-sm text-slate-500 mt-1">100% on-time delivery</p>
+                </div>
+              </div>
+
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl p-6 shadow-xl shadow-orange-500/10 border border-white/30 hover:shadow-2xl hover:shadow-orange-500/20 transition-all duration-300 group">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                    <Star className="h-8 w-8 text-white" />
+                  </div>
+                  <h3 className="font-semibold text-slate-700 mb-2">Client Rating</h3>
+                  <p className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">4.9</p>
+                  <p className="text-sm text-slate-500 mt-1">Top 5% performer</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h3>
+                <div className="space-y-3">
+                  <Button className="w-full justify-start bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create New Gig
+                  </Button>
+                  <Button 
+                    onClick={() => setActiveView('portfolio')}
+                    className="w-full justify-start bg-white/30 backdrop-blur-sm hover:bg-white/40 text-slate-700 border border-white/30"
+                  >
+                    <Upload className="h-4 w-4 mr-2" />
+                    Upload to Portfolio
+                  </Button>
+                  <Button className="w-full justify-start bg-white/30 backdrop-blur-sm hover:bg-white/40 text-slate-700 border border-white/30">
+                    <BarChart3 className="h-4 w-4 mr-2" />
+                    View Analytics
+                  </Button>
+                </div>
+              </div>
+
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4">Recent Activity</h3>
+                <div className="space-y-3">
+                  {[
+                    { action: "New order received", client: "TechCorp Inc.", time: "2 hours ago" },
+                    { action: "Project delivered", client: "StartupXYZ", time: "1 day ago" },
+                    { action: "5-star review received", client: "Creative Co.", time: "3 days ago" }
+                  ].map((activity, index) => (
+                    <div key={index} className="flex items-center space-x-3 p-3 bg-white/30 backdrop-blur-sm rounded-lg">
+                      <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0"></div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-slate-900">{activity.action}</p>
+                        <p className="text-xs text-slate-600">{activity.client} • {activity.time}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Projects Tab */}
+        {activeView === 'projects' && (
+          <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl shadow-emerald-500/10 border border-white/30 overflow-hidden">
+            <div className="p-6 border-b border-white/20">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-slate-800">My Projects</h2>
+                <Badge className="bg-emerald-100/80 text-emerald-800 backdrop-blur-sm">3 Active</Badge>
+              </div>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {recentOrders.map((order) => (
+                  <div key={order.id} className="bg-white/30 backdrop-blur-sm rounded-xl p-6 border border-white/20 hover:bg-white/40 transition-all duration-300">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="flex items-start space-x-4 flex-1">
+                        <Avatar className="w-12 h-12">
+                          <AvatarImage src={order.clientAvatar} />
+                          <AvatarFallback>{order.client.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-slate-800 mb-1">{order.title}</h4>
+                          <p className="text-sm text-slate-600 mb-2">{order.description}</p>
+                          <p className="text-sm text-slate-600">for {order.client}</p>
+                        </div>
+                      </div>
+                      <div className="text-right flex flex-col items-end space-y-2">
+                        <Badge className={`${getStatusColor(order.status)} backdrop-blur-sm`}>
+                          {order.status}
+                        </Badge>
+                        <div className="text-lg font-bold text-emerald-600">${order.earnings}</div>
+                        <div className="text-sm text-slate-500">Due: {order.deadline}</div>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      {order.rating && (
+                        <div className="flex items-center space-x-1">
+                          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                          <span className="text-sm font-medium">{order.rating}</span>
+                        </div>
+                      )}
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="outline" className="bg-white/40 backdrop-blur-sm border-white/30">
+                          <MessageSquare className="h-3 w-3 mr-1" />
+                          Message
+                        </Button>
+                        <Button size="sm" variant="outline" className="bg-white/40 backdrop-blur-sm border-white/30">
+                          <Upload className="h-3 w-3 mr-1" />
+                          Deliver
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Portfolio Tab */}
+        {activeView === 'portfolio' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-slate-900">My Portfolio</h2>
+              <Button 
+                onClick={() => setShowAddPortfolio(true)}
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Add Project
+              </Button>
+            </div>
+
+            {/* Add Portfolio Modal */}
+            {showAddPortfolio && (
+              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 p-6 max-w-md w-full">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-bold text-slate-900">Add Portfolio Item</h3>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => setShowAddPortfolio(false)}
+                      className="text-slate-500 hover:text-slate-700"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                  
+                  <form onSubmit={handleAddPortfolio} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">Project Title</label>
+                      <Input
+                        placeholder="My awesome project"
+                        value={newPortfolioItem.title}
+                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, title: e.target.value})}
+                        className="bg-white/50 backdrop-blur-sm border-white/30"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">Category</label>
+                      <select 
+                        value={newPortfolioItem.category}
+                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, category: e.target.value})}
+                        className="w-full h-10 bg-white/50 backdrop-blur-sm border border-white/30 rounded-md px-3"
+                        required
+                      >
+                        <option value="">Select category</option>
+                        <option value="Web Development">Web Development</option>
+                        <option value="UI/UX Design">UI/UX Design</option>
+                        <option value="Mobile Development">Mobile Development</option>
+                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Content Writing">Content Writing</option>
+                      </select>
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">Description</label>
+                      <textarea
+                        placeholder="Describe your project..."
+                        value={newPortfolioItem.description}
+                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, description: e.target.value})}
+                        className="w-full h-20 bg-white/50 backdrop-blur-sm border border-white/30 rounded-md px-3 py-2 resize-none"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">Technologies (comma-separated)</label>
+                      <Input
+                        placeholder="React, Node.js, MongoDB"
+                        value={newPortfolioItem.technologies}
+                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, technologies: e.target.value})}
+                        className="bg-white/50 backdrop-blur-sm border-white/30"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">Project Link (Optional)</label>
+                      <Input
+                        type="url"
+                        placeholder="https://example.com"
+                        value={newPortfolioItem.link}
+                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, link: e.target.value})}
+                        className="bg-white/50 backdrop-blur-sm border-white/30"
+                      />
+                    </div>
+                    
+                    <div className="flex space-x-3 pt-4">
+                      <Button 
+                        type="button"
+                        onClick={() => setShowAddPortfolio(false)}
+                        variant="outline"
+                        className="flex-1 bg-white/50 backdrop-blur-sm border-white/30"
+                      >
+                        Cancel
+                      </Button>
+                      <Button 
+                        type="submit"
+                        className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600"
+                      >
+                        Add Project
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
+
+            {/* Portfolio Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {portfolio.map((item) => (
+                <div key={item.id} className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300 group">
+                  <div className="aspect-video bg-slate-200 overflow-hidden">
+                    <img 
+                      src={item.image} 
+                      alt={item.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+                  <div className="p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <Badge className="bg-emerald-100/80 text-emerald-800 text-xs">
+                        {item.category}
+                      </Badge>
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-white/30">
+                          <Edit className="h-3 w-3" />
+                        </Button>
+                        <Button size="sm" variant="ghost" className="h-8 w-8 p-0 hover:bg-white/30 text-red-500">
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    <h3 className="font-semibold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                      {item.title}
+                    </h3>
+                    
+                    <p className="text-slate-600 text-sm mb-4 line-clamp-2">
+                      {item.description}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {item.technologies.slice(0, 3).map((tech, index) => (
+                        <Badge key={index} variant="secondary" className="text-xs bg-white/40 backdrop-blur-sm">
+                          {tech}
+                        </Badge>
+                      ))}
+                      {item.technologies.length > 3 && (
+                        <Badge variant="secondary" className="text-xs bg-white/40 backdrop-blur-sm">
+                          +{item.technologies.length - 3}
+                        </Badge>
+                      )}
+                    </div>
+                    
+                    {item.link && (
+                      <Button size="sm" variant="outline" className="w-full bg-white/30 backdrop-blur-sm border-white/30">
+                        <Globe className="h-3 w-3 mr-2" />
+                        View Project
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Skills Tab */}
+        {activeView === 'skills' && (
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-slate-900">My Skills</h2>
+              <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
+                <Plus className="h-4 w-4 mr-2" />
+                Add Skill
+              </Button>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              {skills.map((skill, index) => (
+                <div key={index} className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h3 className="font-semibold text-slate-900 text-lg">{skill.name}</h3>
+                      <p className="text-sm text-slate-600">{skill.category}</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                        {skill.level}%
+                      </div>
+                      <p className="text-xs text-slate-500">{skill.projects} projects</p>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <div className="w-full bg-white/30 rounded-full h-3">
+                      <div 
+                        className={`bg-gradient-to-r ${skill.color} h-3 rounded-full transition-all duration-1000 ease-out`}
+                        style={{ width: `${skill.level}%` }}
+                      ></div>
+                    </div>
+                    
+                    <div className="flex justify-between items-center text-sm">
+                      <span className="text-slate-600">Proficiency</span>
+                      <div className="flex space-x-2">
+                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0 hover:bg-white/30">
+                          <Edit className="h-3 w-3" />
+                        </Button>
+                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0 hover:bg-white/30 text-red-500">
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Earnings Tab */}
+        {activeView === 'earnings' && (
+          <div className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4">This Month</h3>
+                <div className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
+                  $5,200
+                </div>
+                <p className="text-sm text-green-600">+38% from last month</p>
+              </div>
+              
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4">All Time</h3>
+                <div className="text-3xl font-bold text-slate-900 mb-2">$47,350</div>
+                <p className="text-sm text-slate-600">Total earnings</p>
+              </div>
+              
+              <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4">Available</h3>
+                <div className="text-3xl font-bold text-blue-600 mb-2">$2,800</div>
+                <p className="text-sm text-slate-600">Ready to withdraw</p>
+              </div>
+            </div>
+
+            <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30">
+              <div className="p-6 border-b border-white/20">
+                <h3 className="text-lg font-semibold text-slate-900">Recent Earnings</h3>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4">
+                  {[
+                    { project: "E-commerce Platform Development", client: "TechCorp Inc.", amount: 2800, date: "Jan 25", status: "Completed" },
+                    { project: "Mobile App UI Design", client: "StartupXYZ", amount: 1500, date: "Jan 20", status: "In Progress" },
+                    { project: "Brand Identity Package", client: "Creative Co.", amount: 900, date: "Jan 15", status: "Completed" }
+                  ].map((earning, index) => (
+                    <div key={index} className="flex justify-between items-start p-4 bg-white/30 backdrop-blur-sm rounded-xl border border-white/20">
+                      <div className="flex-1">
+                        <h4 className="font-semibold text-slate-900 mb-1">{earning.project}</h4>
+                        <p className="text-sm text-slate-600">{earning.client}</p>
+                        <p className="text-xs text-slate-500 mt-1">{earning.date}</p>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-bold text-emerald-600">${earning.amount}</div>
+                        <Badge className={`text-xs ${getStatusColor(earning.status)}`}>
+                          {earning.status}
+                        </Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default FreelancerDashboard;
