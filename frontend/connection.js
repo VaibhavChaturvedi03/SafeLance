@@ -1,8 +1,66 @@
 import { ethers } from "ethers";
 
-import contractABI from "abhi btata hu";
+const CONTRACT_ADDRESS = "0xf8e81D47203A594245E36C48e151709F0C19fBe8";
 
-const CONTRACT_ADDRESS = "abhi bhej dunga";
+const contractABI = [
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_jobId", "type": "uint256" }],
+    "name": "approveExtension",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_jobId", "type": "uint256" }],
+    "name": "approveWork",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address payable", "name": "_freelancer", "type": "address" },
+      { "internalType": "uint256", "name": "_deadline", "type": "uint256" }
+    ],
+    "name": "createJob",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_platformWallet", "type": "address" },
+      { "internalType": "uint256", "name": "_platformFee", "type": "uint256" }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  { "stateMutability": "payable", "type": "receive" },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_jobId", "type": "uint256" }],
+    "name": "rejectExtension",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "_jobId", "type": "uint256" }],
+    "name": "rejectWork",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "_jobId", "type": "uint256" },
+      { "internalType": "uint256", "name": "_newDeadline", "type": "uint256" }
+    ],
+    "name": "requestExtension",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+];
 
 // Connect to MetaMask 
 async function getProviderAndSigner() {
@@ -15,7 +73,7 @@ async function getProviderAndSigner() {
 // Get contract instance
 async function getContract() {
   const { signer } = await getProviderAndSigner();
-  return new ethers.Contract(CONTRACT_ADDRESS, contractABI.abi, signer);
+  return new ethers.Contract(CONTRACT_ADDRESS, contractABI, signer);
 }
 
 // Create a job
@@ -24,7 +82,7 @@ export async function createJob(freelancer, deadline, amountInEth) {
   const tx = await contract.createJob(
     freelancer,
     deadline,
-    { value: ethers.parseEther(amountInEth) } 
+    { value: ethers.parseEther(amountInEth) }
   );
   await tx.wait();
   console.log("Job created:", tx.hash);
@@ -33,7 +91,7 @@ export async function createJob(freelancer, deadline, amountInEth) {
 // Request deadline extension
 export async function requestExtension(jobId, newDeadline) {
   const contract = await getContract();
-  const tx = await contract.requestDeadlineExtension(jobId, newDeadline);
+  const tx = await contract.requestExtension(jobId, newDeadline);
   await tx.wait();
   console.log("Extension requested:", tx.hash);
 }
@@ -41,7 +99,7 @@ export async function requestExtension(jobId, newDeadline) {
 // Approve extension (client only)
 export async function approveExtension(jobId) {
   const contract = await getContract();
-  const tx = await contract.approveDeadlineExtension(jobId);
+  const tx = await contract.approveExtension(jobId);
   await tx.wait();
   console.log("Extension approved:", tx.hash);
 }
@@ -69,3 +127,4 @@ export async function cancelJob(jobId) {
   await tx.wait();
   console.log("Job cancelled:", tx.hash);
 }
+
