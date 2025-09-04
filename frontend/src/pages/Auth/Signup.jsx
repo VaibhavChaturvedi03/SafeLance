@@ -1,6 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
+import { ArrowLeft, ArrowRight, Briefcase, Building2, CheckCircle, DollarSign, Globe, Mail, Shield, User, Users } from "lucide-react";
+import { Button } from "../../components/Button";
+import { Input } from "../../components/Input";
+
+// TODO: Add navbar to this
 
 const SignupPage = () => {
   const { login } = useAuth();

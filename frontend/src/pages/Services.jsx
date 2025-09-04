@@ -1,5 +1,14 @@
 import { useState } from "react";
 import { mockServices } from "../data/mockservices";
+import { Heart, Search, Star } from "lucide-react";
+import { Input } from "../components/Input";
+import { Button } from "../components/Button";
+import { Card, CardContent } from "../components/Card";
+import { Link } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/Avatar";
+import { mockFreelancers } from "../data/mockFreelancers";
+import { Badge } from "../components/Badge";
+import Navigation from "./Navigation";
 
 const ServicesPage = () => {
   const [searchQuery, setSearchQuery] = useState("");

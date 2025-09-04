@@ -12,11 +12,12 @@ import MessagesPage from './pages/MessagePage';
 import AboutPage from './pages/About';
 import DashboardPage from './pages/Dashboards/Dashboard';
 import { AuthProvider } from './context/AuthProvider';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const App = () => {
   return (
-    <div className="App">
       <AuthProvider>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
@@ -31,8 +32,8 @@ const App = () => {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
         </Routes>
-      </AuthProvider>
-    </div>
+      </BrowserRouter>
+    </AuthProvider>
   );
 };
 

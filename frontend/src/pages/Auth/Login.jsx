@@ -1,6 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
+import { Tabs, TabsList, TabsTrigger } from "../../components/Tabs";
+import { AlertCircle, ArrowLeft, Briefcase, LogIn, Mail, Shield, User } from "lucide-react";
+import { Input } from "../../components/Input";
+import { Button } from "../../components/Button";
+
+// TODO: Add navbar to this
 
 const LoginPage = () => {
   const { login } = useAuth();

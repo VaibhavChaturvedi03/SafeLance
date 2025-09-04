@@ -1,5 +1,13 @@
 import { useState } from "react";
 import { mockFreelancers } from "../data/mockFreelancers";
+import Navigation from "./Navigation";
+import { ArrowRight, Award, CheckCircle, Clock, DollarSign, Filter, MapPin, Search, Star, User } from "lucide-react";
+import { Input } from "../components/Input";
+import { Button } from "../components/Button";
+import { Link } from "react-router-dom";
+import { Card, CardContent } from "../components/Card";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/Avatar";
+import { Badge } from "../components/Badge";
 
 const BrowseFreelancersPage = () => {
   const [searchQuery, setSearchQuery] = useState("");

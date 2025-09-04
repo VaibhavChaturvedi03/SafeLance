@@ -1,6 +1,10 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { mockServices } from "../data/mockservices";
 import { mockFreelancers } from "../data/mockFreelancers";
+import Navigation from "./Navigation";
+import { Button } from "../components/Button";
+import { MessageCircle } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/Avatar";
 
 const ServiceDetailPage = () => {
   const { id } = useParams();

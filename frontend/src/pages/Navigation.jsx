@@ -1,4 +1,7 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthProvider";
+import { Button } from "../components/Button";
+import { Briefcase, MessageSquare, User } from "lucide-react";
 
 const Navigation = () => {
   const { user, logout } = useAuth();

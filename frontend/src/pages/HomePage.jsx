@@ -1,8 +1,15 @@
-import { Award, Briefcase, Camera, CheckCircle, Code, Globe, Megaphone, Music, Palette, PenTool, Users, Zap } from "lucide-react";
+import { ArrowRight, Award, Briefcase, Camera, CheckCircle, Code, Globe, Heart, Mail, Megaphone, Music, Palette, PenTool, Phone, Quote, Search, Shield, Star, TrendingUp, User, Users, Zap } from "lucide-react";
 import { useState } from "react";
 import { mockServices } from "../data/mockservices";
 import { mockFreelancers } from "../data/mockFreelancers";
 import { mockTestimonials } from "../data/mockTestimonials";
+import { Input } from "../components/Input";
+import { Button } from "../components/Button";
+import { Link } from "react-router-dom";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/Avatar";
+import { Badge } from "../components/Badge";
+import Navigation from "./Navigation";
+
 
 const HomePage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -25,26 +32,26 @@ const HomePage = () => {
     { label: "Countries Served", value: "150+", icon: Globe }
   ];
 
-  const howItWorks = [
-    {
-      step: "1",
-      title: "Post Your Project",
-      description: "Tell us what you need done and we'll connect you with talented freelancers.",
-      icon: FileText
-    },
-    {
-      step: "2", 
-      title: "Choose Your Freelancer",
-      description: "Browse profiles, compare proposals, and select the perfect freelancer for your project.",
-      icon: Search
-    },
-    {
-      step: "3",
-      title: "Collaborate & Complete",
-      description: "Work together seamlessly with our built-in tools and get your project delivered on time.",
-      icon: Handshake
-    }
-  ];
+//   const howItWorks = [
+//     {
+//       step: "1",
+//       title: "Post Your Project",
+//       description: "Tell us what you need done and we'll connect you with talented freelancers.",
+//       icon: FileText
+//     },
+//     {
+//       step: "2", 
+//       title: "Choose Your Freelancer",
+//       description: "Browse profiles, compare proposals, and select the perfect freelancer for your project.",
+//       icon: Search
+//     },
+//     {
+//       step: "3",
+//       title: "Collaborate & Complete",
+//       description: "Work together seamlessly with our built-in tools and get your project delivered on time.",
+//       icon: Handshake
+//     }
+//   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-blue-50 to-purple-50 relative overflow-hidden">
