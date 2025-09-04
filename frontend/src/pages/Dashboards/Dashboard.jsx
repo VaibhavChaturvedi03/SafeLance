@@ -1,4 +1,7 @@
+import { Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthProvider";
+import ClientDashboard from "./ClientDashboard";
+import FreelancerDashboard from "./FreelancerDashboard";
 
 const DashboardPage = () => {
   const { user, userType } = useAuth();

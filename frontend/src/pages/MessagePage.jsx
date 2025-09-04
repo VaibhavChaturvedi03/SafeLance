@@ -1,4 +1,9 @@
 import { useState } from "react";
+import Navigation from "./Navigation";
+import { File, MessageSquare, Phone, Search, Video } from "lucide-react";
+import { Input } from "../components/Input";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/Avatar";
+import { Button } from "../components/Button";
 
 const MessagesPage = () => {
   const [selectedConversation, setSelectedConversation] = useState(null);

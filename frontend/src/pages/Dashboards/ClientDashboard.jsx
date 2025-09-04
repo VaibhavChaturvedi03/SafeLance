@@ -1,6 +1,10 @@
-import { BarChart3, Briefcase, DollarSign, MessageSquare } from "lucide-react";
+import { ArrowLeft, Award, BarChart3, Briefcase, DollarSign, Edit, Eye, MessageSquare, Plus, Search, Settings, Star, User, Users } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
+import { Link } from "react-router-dom";
+import { Button } from "../../components/Button";
+import { Badge } from "../../components/Badge";
+import { Avatar, AvatarFallback, AvatarImage } from "../../components/Avatar";
 
 const ClientDashboard = () => {
   const { user } = useAuth();

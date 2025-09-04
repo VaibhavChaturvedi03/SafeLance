@@ -1,5 +1,9 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { mockFreelancers } from "../data/mockFreelancers";
+import { Button } from "../components/Button";
+import Navigation from "./Navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "../components/Avatar";
+import { CheckCircle, MessageCircle, Star } from "lucide-react";
 
 const FreelancerProfilePage = () => {
   const { id } = useParams();

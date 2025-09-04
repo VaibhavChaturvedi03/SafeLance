@@ -1,3 +1,5 @@
+import Navigation from "./Navigation";
+
 const AboutPage = () => (
   <div className="min-h-screen bg-slate-50">
     <Navigation />
