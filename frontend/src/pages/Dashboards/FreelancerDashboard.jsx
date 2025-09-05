@@ -6,7 +6,6 @@ import { Button } from "../../components/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/Avatar";
 import { Badge } from "../../components/Badge";
 import { Input } from "../../components/Input";
-import { createPortal } from "react-dom";
 
 const FreelancerDashboard = () => {
   const { user } = useAuth();
@@ -146,7 +145,7 @@ const FreelancerDashboard = () => {
     title: "Build a responsive e-commerce website",
     category: "Web Development",
     budget: 3000,
-    duration: "4 weeks",
+    timeline: "4 weeks",
     client: "Tech Corp",
     postedAgo: "2 days ago"
   },
@@ -155,7 +154,7 @@ const FreelancerDashboard = () => {
     title: "Design logo and branding materials",
     category: "Graphic Design",
     budget: 500,
-    duration: "1 week",
+    timeline: "1 week",
     client: "Startup Inc",
     postedAgo: "5 days ago"
   },
@@ -164,12 +163,13 @@ const FreelancerDashboard = () => {
     title: "Create marketing campaign for product launch",
     category: "Digital Marketing",
     budget: 1200,
-    duration: "3 weeks",
+    timeline: "3 weeks",
     client: "Brand Agency",
     postedAgo: "1 day ago"
   }
 ];
-
+ const localJobs = JobStorage.getAllJobs();
+ const allGigs = [...DemoGigs, ...localJobs];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 relative overflow-hidden">
@@ -731,7 +731,7 @@ const FreelancerDashboard = () => {
   <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-8 mb-8">
     <h2 className="text-3xl font-bold text-emerald-700 mb-8">Available Gigs</h2>
     <div className="space-y-8 max-h-[600px] overflow-y-auto pr-2">
-      {DemoGigs.map(gig => (
+      {allGigs.map(gig => (
         <div
           key={gig.id}
           className="p-6 bg-white rounded-2xl shadow-md flex flex-col sm:flex-row justify-between items-start gap-6 hover:shadow-lg transition-shadow border border-green-100"
@@ -739,7 +739,7 @@ const FreelancerDashboard = () => {
           <div className="flex flex-col flex-grow">
             <h3 className="text-xl font-semibold text-green-800 mb-2">{gig.title}</h3>
             <p className="text-green-700 mb-1">
-              <span className="font-medium">{gig.category}</span> &mdash; Budget: <span className="font-semibold">${gig.budget}</span> &mdash; Duration: {gig.duration}
+              <span className="font-medium">{gig.category}</span> &mdash; Budget: <span className="font-semibold">${gig.budget}</span> &mdash; Duration: {gig.timeline}
             </p>
             <p className="text-green-600 text-sm mb-1">Client: {gig.client}</p>
             <p className="text-green-500 text-xs italic">Posted {gig.postedAgo}</p>
