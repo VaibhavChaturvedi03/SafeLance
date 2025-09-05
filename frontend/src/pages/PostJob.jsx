@@ -3,6 +3,7 @@ import Navigation from "./Navigation";
 import { Input } from "../components/Input";
 import { ArrowLeft, ArrowRight, Clock, DollarSign, Send, Upload } from "lucide-react";
 import { Button } from "../components/Button";
+import { JobStorage } from "../../Utils/Jobstorage";
 
 const PostJobPage = () => {
   const [jobData, setJobData] = useState({
@@ -50,8 +51,9 @@ const PostJobPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    // Simulated API call delay
-    setTimeout(() => {
+    const result = JobStorage.saveJob(jobData);
+
+    if( result.success ){
       alert("Job posted successfully!");
       setIsSubmitting(false);
       setJobData({
@@ -67,7 +69,11 @@ const PostJobPage = () => {
         attachments: []
       });
       setCurrentStep(1);
-    }, 2000);
+    } else {
+      setIsSubmitting(false);
+      alert("submission failed");
+    }
+    
   };
 
   return (
@@ -300,11 +306,11 @@ const PostJobPage = () => {
                     required
                   >
                     <option value="">Select timeline</option>
-                    <option value="asap">ASAP (1-3 days)</option>
-                    <option value="week">Within a week</option>
-                    <option value="month">Within a month</option>
-                    <option value="quarter">1-3 months</option>
-                    <option value="flexible">I'm flexible</option>
+                    <option value="ASAP (1-3 days)">ASAP (1-3 days)</option>
+                    <option value="Within a week">Within a week</option>
+                    <option value="Within a month">Within a month</option>
+                    <option value="1-3 months">1-3 months</option>
+                    <option value="Flexible">I'm flexible</option>
                   </select>
                 </section>
 

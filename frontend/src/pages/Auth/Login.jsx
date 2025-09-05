@@ -72,7 +72,7 @@ const LoginPage = () => {
                     <TabsTrigger 
                       value="client" 
                       onClick={() => setFormData({...formData, userType: "client"})}
-                      className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-medium transition-all duration-300"
+                      className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-medium transition-all cursor-pointer duration-300"
                     >
                       <Briefcase className="h-4 w-4 mr-2" />
                       I'm a Client
@@ -80,9 +80,9 @@ const LoginPage = () => {
                     <TabsTrigger 
                       value="freelancer" 
                       onClick={() => setFormData({...formData, userType: "freelancer"})}
-                      className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-medium transition-all duration-300"
+                      className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white font-medium transition-all duration-300 cursor-pointer"
                     >
-                      <User className="h-4 w-4 mr-2" />
+                      <User className="h-4 w-4 mr-2 " />
                       I'm a Freelancer
                     </TabsTrigger>
                   </TabsList>
