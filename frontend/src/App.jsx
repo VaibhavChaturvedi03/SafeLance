@@ -13,6 +13,7 @@ import DashboardPage from './pages/Dashboards/Dashboard';
 import { AuthProvider } from './context/AuthProvider';
 import { BlockchainProvider } from './context/BlockchainContext'; 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ApplicationForm from './pages/ApplicationForm';
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
             {/* <Route path="/how-it-works" element={<HowItWorksPage />} /> */}
             <Route path="/about" element={<AboutPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/application" element={<ApplicationForm />} />
           </Routes>
         </BrowserRouter>
       </BlockchainProvider>

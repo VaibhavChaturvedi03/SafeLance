@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, Clock, DollarSign, Send, Upload } from "lucide-r
 import { Button } from "../components/Button";
 import { JobStorage } from "../../Utils/Jobstorage";
 import { ethers } from "ethers";
+import { useNavigate } from "react-router-dom";
 
 const abi = [
 	{
@@ -388,6 +389,8 @@ const PostJobPage = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const navigate = useNavigate();
+
   const categories = [
     { id: "development", name: "Programming & Tech", subcategories: ["Web Development", "Mobile Development", "Desktop Development", "AI/ML", "Data Science"] },
     { id: "design", name: "Graphics & Design", subcategories: ["Logo Design", "Web Design", "UI/UX Design", "Print Design", "3D Design"] },
@@ -415,6 +418,7 @@ const PostJobPage = () => {
   const PrevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
   const handleSubmit = async (e) => {
+    navigate("/services");
   e.preventDefault();
 
   // basic validation

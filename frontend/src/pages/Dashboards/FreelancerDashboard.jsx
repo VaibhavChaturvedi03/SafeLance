@@ -1,13 +1,14 @@
 import { BarChart3, Bell, Briefcase, DollarSign, Edit, Folder, Globe, Grid3X3, MessageSquare, Plus, Settings, Star, Target, Trash2, TrendingUp, Upload, X, Zap } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/Avatar";
 import { Badge } from "../../components/Badge";
 import { Input } from "../../components/Input";
 import { JobStorage } from "../../../Utils/Jobstorage";
-import {createPortal} from "react-dom";
+import { createPortal } from "react-dom";
+import ApplyJobModal from "../../components/ApplyJobModel"
 
 const FreelancerDashboard = () => {
   const { user } = useAuth();
@@ -128,16 +129,19 @@ const FreelancerDashboard = () => {
   }
 
   const deleteSkill = (index) => {
-  setskills(skills.filter((_, i) => i !== index));
-};
+    setskills(skills.filter((_, i) => i !== index));
+  };
 
-const editSkill = (index) => {
-  setEditIndex(index);          
-  setNewSkill(skills[index]);   
-  setShowAddSkills(true);       
-};
+  const [isApplyModelOpen, setIsApplyModelOpen] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
 
+  const [editIndex, setEditIndex] = useState(null);
 
+  const editSkill = (index) => {
+    setEditIndex(index);
+    setNewSkill(skills[index].name);
+    setShowAddSkills(true);
+  };
 
   const [portfolio, setPortfolio] = useState([
     {
@@ -233,7 +237,8 @@ const editSkill = (index) => {
       budget: 3000,
       timeline: "4 weeks",
       client: "Tech Corp",
-      postedAgo: "2 days ago"
+      postedAgo: "2 days ago",
+      skills: ["React", "Node.js", "MongoDB"]
     },
     {
       id: 2,
@@ -242,7 +247,8 @@ const editSkill = (index) => {
       budget: 500,
       timeline: "1 week",
       client: "Startup Inc",
-      postedAgo: "5 days ago"
+      postedAgo: "5 days ago",
+      skills: ["Figma", "Adobe Illustrator"]
     },
     {
       id: 3,
@@ -251,26 +257,31 @@ const editSkill = (index) => {
       budget: 1200,
       timeline: "3 weeks",
       client: "Brand Agency",
-      postedAgo: "1 day ago"
+      postedAgo: "1 day ago",
+      skills: ["SEO", "Google Ads", "Content Writing"]
     }
   ];
   const localJobs = JobStorage.getAllJobs();
   const allGigs = [...DemoGigs, ...localJobs];
 
   const getRelevantProjects = (job) => {
-  return portfolio.filter((project) =>
-    project.technologies.some((tech) => job.skills.includes(tech))
-  );
-};
+    return portfolio.filter((project) =>
+      project.technologies.some((tech) => (job.skills || []).includes(tech))
+    );
+  };
 
-const handleApplyJobs = (job) => {
-  const relevant = getRelevantProjects(job);
-  
-  if (relevant.length === 0) {
-    alert("No matching projects found in your portfolio for this job.");
-    return;
+  const handleApplyJobs = (job) => {
+    const relevant = getRelevantProjects(job);
+
+    if (relevant.length === 0) {
+      alert("No matching projects found in your portfolio for this job.");
+      return;
+    }
+
+    setIsApplyModelOpen(true);
   }
-}
+
+  const navigate = useNavigate();
 
 
   return (
@@ -300,7 +311,7 @@ const handleApplyJobs = (job) => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="cursor-pointerrelative bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20"
+                className="cursor-pointer relative bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20"
               >
                 <Bell className="h-4 w-4" />
                 {notifications.length > 0 && (
@@ -766,14 +777,14 @@ const handleApplyJobs = (job) => {
                   </div>
 
                   <div className="flex space-x-2 mt-3">
-                    <Button size="sm" variant="ghost" className="h-6 w-6 p-0 hover:bg-white/30" onClick = {() => editSkill(index)} >
+                    <Button size="sm" variant="ghost" className="h-6 w-6 p-0 hover:bg-white/30" onClick={() => editSkill(index)} >
                       <Edit className="h-3 w-3" />
                     </Button>
                     <Button
                       size="sm"
                       variant="ghost"
                       className="h-6 w-6 p-0 hover:bg-white/30 text-red-500"
-                      onClick = {() => deleteSkill(index)}
+                      onClick={() => deleteSkill(index)}
                     >
                       <Trash2 className="h-3 w-3" />
                     </Button>
@@ -900,41 +911,53 @@ const handleApplyJobs = (job) => {
         )}
       </div>
       {activeView === 'find_gigs' && (
-  <div className="space-y-6">
-    <div className="flex items-center justify-between">
-      <h2 className="text-2xl font-bold text-slate-900">Find Gigs</h2>
-    </div>
-
-    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {allGigs.map((gig) => (
-        <div
-          key={gig.id}
-          className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300"
-        >
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-slate-900">{gig.title}</h3>
-            <Badge className="bg-emerald-100/80 text-emerald-800 text-xs">{gig.category}</Badge>
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-slate-900">Find Gigs</h2>
           </div>
 
-          <p className="text-sm text-slate-600 mb-2">Client: {gig.client}</p>
-          {gig.budget && <p className="text-sm text-slate-600 mb-2">Budget: ${gig.budget}</p>}
-          {gig.timeline && <p className="text-sm text-slate-600 mb-2">Timeline: {gig.timeline}</p>}
-          {gig.postedAgo && <p className="text-xs text-gray-500">Posted: {gig.postedAgo}</p>}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {allGigs.map((gig) => (
+              <div
+                key={gig.id}
+                className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300"
+              >
+                <h3 className="text-lg font-semibold text-slate-900">{gig.title}</h3>
+                <p className="text-sm text-slate-600">{gig.category}</p>
+                <p className="mt-2 text-slate-700">
+                  Budget: <span className="font-semibold">${gig.budget}</span>
+                </p>
+                <p className="text-slate-600">Timeline: {gig.timeline}</p>
+                <p className="text-slate-500 text-xs">Posted {gig.postedAgo}</p>
 
-          <div className="mt-4">
-            <Button
-              size="sm"
-              onClick = {() => handleApplyJobs(job)}
-              className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
-            >
-              Apply Now
-            </Button>
+                {/* Apply Button */}
+                <div className="mt-4 flex justify-end">
+                  <Button
+                    onClick={() => {
+                      setSelectedJob(gig);
+                      setIsApplyModelOpen(true);
+                    }}
+                    className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white"
+                  >
+                    Apply Now
+                  </Button>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-      ))}
-    </div>
-  </div>
+
+          {isApplyModelOpen && (
+  <ApplyJobModal
+    isOpen={isApplyModelOpen}
+    onClose={() => setIsApplyModelOpen(false)}
+    portfolio={portfolio}     
+    job={selectedJob}         
+  />
 )}
+
+
+        </div>
+      )}
 
 
     </div>
