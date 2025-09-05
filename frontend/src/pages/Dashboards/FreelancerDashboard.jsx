@@ -578,23 +578,13 @@ const FreelancerDashboard = () => {
                       <p className="text-sm text-slate-600">{skill.category}</p>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                        {skill.level}%
-                      </div>
                       <p className="text-xs text-slate-500">{skill.projects} projects</p>
                     </div>
                   </div>
                   
                   <div className="space-y-2">
                     <div className="w-full bg-white/30 rounded-full h-3">
-                      <div 
-                        className={`bg-gradient-to-r ${skill.color} h-3 rounded-full transition-all duration-1000 ease-out`}
-                        style={{ width: `${skill.level}%` }}
-                      ></div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-slate-600">Proficiency</span>
+                      
                       <div className="flex space-x-2">
                         <Button size="sm" variant="ghost" className="h-6 w-6 p-0 hover:bg-white/30">
                           <Edit className="h-3 w-3" />
