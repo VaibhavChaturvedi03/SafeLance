@@ -113,6 +113,36 @@ const FreelancerDashboard = () => {
       default: return 'bg-gray-100/80 text-gray-800';
     }
   };
+  const DemoGigs = [
+  {
+    id: 1,
+    title: "Build a responsive e-commerce website",
+    category: "Web Development",
+    budget: 3000,
+    duration: "4 weeks",
+    client: "Tech Corp",
+    postedAgo: "2 days ago"
+  },
+  {
+    id: 2,
+    title: "Design logo and branding materials",
+    category: "Graphic Design",
+    budget: 500,
+    duration: "1 week",
+    client: "Startup Inc",
+    postedAgo: "5 days ago"
+  },
+  {
+    id: 3,
+    title: "Create marketing campaign for product launch",
+    category: "Digital Marketing",
+    budget: 1200,
+    duration: "3 weeks",
+    client: "Brand Agency",
+    postedAgo: "1 day ago"
+  }
+];
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 relative overflow-hidden">
@@ -179,7 +209,8 @@ const FreelancerDashboard = () => {
                 { id: 'projects', label: 'Projects', icon: Briefcase },
                 { id: 'portfolio', label: 'Portfolio', icon: Folder },
                 { id: 'skills', label: 'Skills', icon: Target },
-                { id: 'earnings', label: 'Earnings', icon: DollarSign }
+                { id: 'earnings', label: 'Earnings', icon: DollarSign },
+                { id: 'find_gigs', label: 'Find Gigs', icon: Zap }
               ].map((tab) => {
                 const IconComponent = tab.icon;
                 return (
@@ -636,6 +667,34 @@ const FreelancerDashboard = () => {
           </div>
         )}
       </div>
+      {activeView === 'find_gigs' && (
+  <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-8 mb-8">
+    <h2 className="text-3xl font-bold text-emerald-700 mb-8">Available Gigs</h2>
+    <div className="space-y-8 max-h-[600px] overflow-y-auto pr-2">
+      {DemoGigs.map(gig => (
+        <div
+          key={gig.id}
+          className="p-6 bg-white rounded-2xl shadow-md flex flex-col sm:flex-row justify-between items-start gap-6 hover:shadow-lg transition-shadow border border-green-100"
+        >
+          <div className="flex flex-col flex-grow">
+            <h3 className="text-xl font-semibold text-green-800 mb-2">{gig.title}</h3>
+            <p className="text-green-700 mb-1">
+              <span className="font-medium">{gig.category}</span> &mdash; Budget: <span className="font-semibold">${gig.budget}</span> &mdash; Duration: {gig.duration}
+            </p>
+            <p className="text-green-600 text-sm mb-1">Client: {gig.client}</p>
+            <p className="text-green-500 text-xs italic">Posted {gig.postedAgo}</p>
+          </div>
+          <div className="flex-shrink-0">
+            <button className="px-6 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold rounded-2xl hover:from-emerald-700 hover:to-teal-700 transition">
+              Apply Now
+            </button>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
