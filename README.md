@@ -1,6 +1,6 @@
 # SafeLance
 
-abi= [
+abi=[
 	{
 		"inputs": [
 			{
