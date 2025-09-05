@@ -56,12 +56,12 @@ const Navigation = () => {
           ) : (
             <div className="flex items-center space-x-3">
               <Link to="/login">
-                <Button variant="ghost" size="sm" className="bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20">
+                <Button variant="ghost" size="sm" className="bg-white/20 backdrop-blur-sm cursor-pointer hover:bg-white/30 border border-white/20">
                   Sign In
                 </Button>
               </Link>
               <Link to="/signup">
-                <Button size="sm" className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg">
+                <Button size="sm" className="bg-gradient-to-r cursor-pointer from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg">
                   Join Now
                 </Button>
               </Link>

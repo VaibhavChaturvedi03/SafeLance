@@ -13,71 +13,155 @@ const FreelancerDashboard = () => {
   const { user } = useAuth();
   const [activeView, setActiveView] = useState('overview');
   const [recentOrders] = useState([
-    { 
-      id: 1, 
-      title: "E-commerce Platform Development", 
-      client: "TechCorp Inc.", 
+
+    {
+      id: 1,
+      title: "E-commerce Platform Development",
+      client: "TechCorp Inc.",
       clientAvatar: "https://images.unsplash.com/photo-1670851810697-68ddb4ecae1c?w=100&h=100&fit=crop&crop=face",
-      earnings: 2800, 
-      status: "Completed", 
-      rating: 5, 
+      earnings: 2800,
+      status: "Completed",
+      rating: 5,
       deadline: "2025-01-25",
       description: "Modern e-commerce platform with payment integration"
     },
-    { 
-      id: 2, 
-      title: "Mobile App UI Design", 
-      client: "StartupXYZ", 
+    {
+      id: 2,
+      title: "Mobile App UI Design",
+      client: "StartupXYZ",
       clientAvatar: "https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=100&h=100&fit=crop&crop=face",
-      earnings: 1500, 
-      status: "In Progress", 
-      rating: null, 
+      earnings: 1500,
+      status: "In Progress",
+      rating: null,
       deadline: "2025-02-10",
       description: "Complete mobile app design system"
     },
-    { 
-      id: 3, 
-      title: "Brand Identity Package", 
-      client: "Creative Co.", 
+    {
+      id: 3,
+      title: "Brand Identity Package",
+      client: "Creative Co.",
       clientAvatar: "https://images.unsplash.com/photo-1541746972996-4e0b0f43e02a?w=100&h=100&fit=crop&crop=face",
-      earnings: 900, 
-      status: "In Review", 
-      rating: null, 
+      earnings: 900,
+      status: "In Review",
+      rating: null,
       deadline: "2025-02-05",
       description: "Complete brand identity and style guide"
     }
   ]);
 
-  const [skills] = useState([
+  const [skills, setskills] = useState([
     { name: "React Development", level: 95, projects: 45, category: "Frontend", color: "from-blue-500 to-blue-600" },
     { name: "UI/UX Design", level: 88, projects: 32, category: "Design", color: "from-purple-500 to-purple-600" },
     { name: "Node.js", level: 82, projects: 28, category: "Backend", color: "from-green-500 to-green-600" },
     { name: "Python", level: 78, projects: 25, category: "Backend", color: "from-yellow-500 to-yellow-600" }
   ]);
 
+  const [showAddSkills, setShowAddSkills] = useState(false);
+  const [newSkill, setNewSkill] = useState("");
+
+  const availableSkills = [
+    // Frontend
+    "HTML", "CSS", "JavaScript", "TypeScript", "React", "Next.js", "Vue.js", "Nuxt.js",
+    "Angular", "Svelte", "Tailwind CSS", "Bootstrap", "Material UI", "Chakra UI",
+    "Redux", "Zustand", "Three.js", "GSAP",
+
+    // Backend
+    "Node.js", "Express.js", "NestJS", "Django", "Flask", "FastAPI",
+    "Spring Boot", "Laravel", "Ruby on Rails", "ASP.NET Core", "Go (Golang)",
+
+    // Databases
+    "MySQL", "PostgreSQL", "MongoDB", "SQLite", "MariaDB",
+    "Firebase", "Supabase", "Redis", "Elasticsearch", "Cassandra",
+
+    // Programming Languages
+    "C", "C++", "C#", "Java", "Python", "Go", "Rust", "Kotlin",
+    "Swift", "PHP", "Ruby", "R", "Matlab", "Perl", "Scala",
+
+    // Mobile Development
+    "React Native", "Flutter", "Swift (iOS)", "Kotlin (Android)", "Xamarin",
+
+    // DevOps / Cloud
+    "Docker", "Kubernetes", "Jenkins", "GitHub Actions", "GitLab CI/CD",
+    "AWS", "Azure", "Google Cloud Platform (GCP)", "DigitalOcean",
+    "Terraform", "Ansible", "Vagrant", "NGINX", "Apache",
+
+    // Blockchain / Web3
+    "Solidity", "Ethereum", "Hardhat", "Truffle", "Ganache", "Web3.js",
+    "Ethers.js", "Polygon", "Solana", "Rust (Solana)", "IPFS", "Pinata",
+
+    // Data Science / ML / AI
+    "Pandas", "NumPy", "Scikit-learn", "TensorFlow", "Keras", "PyTorch",
+    "OpenCV", "Matplotlib", "Seaborn", "NLTK", "Hugging Face", "LangChain",
+
+    // UI/UX / Design
+    "Figma", "Adobe XD", "Sketch", "Adobe Photoshop", "Adobe Illustrator",
+    "Canva", "Framer", "InVision",
+
+    // Tools & Misc
+    "Git", "GitHub", "GitLab", "Bitbucket",
+    "Jira", "Trello", "Slack", "Postman", "Insomnia",
+    "Linux", "Bash", "PowerShell", "VS Code", "IntelliJ IDEA"
+  ];
+
+  const handleSkill = (e) => {
+    e.preventDefault();
+    if (!newSkill.trim()) return;
+
+    const skillExist = skills.find(s => s.name.toLowerCase() === newSkill.toLowerCase());
+    if (skillExist) {
+      console.log("skill already exist");
+      return;
+    }
+
+    setskills([
+      ...skills,
+      {
+        name: newSkill,
+        level: 60,
+        projects: 0,
+        category: "General",
+        color: "from-emerald-500 to-teal-600"
+      }
+    ]);
+    setNewSkill("");
+    setShowAddSkills(false);
+  }
+
+  const deleteSkill = (index) => {
+  setskills(skills.filter((_, i) => i !== index));
+};
+
+const editSkill = (index) => {
+  setEditIndex(index);          
+  setNewSkill(skills[index]);   
+  setShowAddSkills(true);       
+};
+
+
+
   const [portfolio, setPortfolio] = useState([
-    { 
-      id: 1, 
-      title: "E-commerce Dashboard", 
-      category: "Web Development", 
+    {
+      id: 1,
+      title: "E-commerce Dashboard",
+      category: "Web Development",
       image: "https://images.unsplash.com/photo-1657697071046-1eef624e96e9?w=400&h=300&fit=crop",
       description: "Modern admin dashboard for e-commerce management",
       technologies: ["React", "Node.js", "MongoDB"],
       link: "https://example.com"
     },
-    { 
-      id: 2, 
-      title: "Mobile Banking App", 
-      category: "UI/UX Design", 
+    {
+      id: 2,
+      title: "Mobile Banking App",
+      category: "UI/UX Design",
       image: "https://images.unsplash.com/photo-1753162657289-6569cd1da479?w=400&h=300&fit=crop",
       description: "Clean and intuitive mobile banking interface",
       technologies: ["Figma", "Principle", "After Effects"],
       link: "https://example.com"
     },
-    { 
-      id: 3, 
-      title: "SaaS Landing Page", 
-      category: "Web Development", 
+    {
+      id: 3,
+      title: "SaaS Landing Page",
+      category: "Web Development",
       image: "https://images.unsplash.com/photo-1590650467980-8eadfa86ff48?w=400&h=300&fit=crop",
       description: "High-converting landing page for SaaS product",
       technologies: ["React", "Tailwind", "Framer Motion"],
@@ -86,30 +170,30 @@ const FreelancerDashboard = () => {
   ]);
 
   // 🔔 Notifications
-    const [showNotifications, setShowNotifications] = useState(false);
-    const [notifications] = useState([
-      {
-        id: 1,
-        client: "TechCorp Inc.",
-        description: "Need a landing page redesign with payment integration",
-        amount: 1200,
-        time: "2h ago",
-      },
-      {
-        id: 2,
-        client: "StartupXYZ",
-        description: "Mobile app design system required",
-        amount: 800,
-        time: "1d ago",
-      },
-      {
-        id: 3,
-        client: "Creative Co.",
-        description: "Brand identity and logo package",
-        amount: 500,
-        time: "3d ago",
-      },
-    ]);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const [notifications] = useState([
+    {
+      id: 1,
+      client: "TechCorp Inc.",
+      description: "Need a landing page redesign with payment integration",
+      amount: 1200,
+      time: "2h ago",
+    },
+    {
+      id: 2,
+      client: "StartupXYZ",
+      description: "Mobile app design system required",
+      amount: 800,
+      time: "1d ago",
+    },
+    {
+      id: 3,
+      client: "Creative Co.",
+      description: "Brand identity and logo package",
+      amount: 500,
+      time: "3d ago",
+    },
+  ]);
 
   const [showAddPortfolio, setShowAddPortfolio] = useState(false);
   const [newPortfolioItem, setNewPortfolioItem] = useState({
@@ -142,36 +226,52 @@ const FreelancerDashboard = () => {
     }
   };
   const DemoGigs = [
-  {
-    id: 1,
-    title: "Build a responsive e-commerce website",
-    category: "Web Development",
-    budget: 3000,
-    timeline: "4 weeks",
-    client: "Tech Corp",
-    postedAgo: "2 days ago"
-  },
-  {
-    id: 2,
-    title: "Design logo and branding materials",
-    category: "Graphic Design",
-    budget: 500,
-    timeline: "1 week",
-    client: "Startup Inc",
-    postedAgo: "5 days ago"
-  },
-  {
-    id: 3,
-    title: "Create marketing campaign for product launch",
-    category: "Digital Marketing",
-    budget: 1200,
-    timeline: "3 weeks",
-    client: "Brand Agency",
-    postedAgo: "1 day ago"
+    {
+      id: 1,
+      title: "Build a responsive e-commerce website",
+      category: "Web Development",
+      budget: 3000,
+      timeline: "4 weeks",
+      client: "Tech Corp",
+      postedAgo: "2 days ago"
+    },
+    {
+      id: 2,
+      title: "Design logo and branding materials",
+      category: "Graphic Design",
+      budget: 500,
+      timeline: "1 week",
+      client: "Startup Inc",
+      postedAgo: "5 days ago"
+    },
+    {
+      id: 3,
+      title: "Create marketing campaign for product launch",
+      category: "Digital Marketing",
+      budget: 1200,
+      timeline: "3 weeks",
+      client: "Brand Agency",
+      postedAgo: "1 day ago"
+    }
+  ];
+  const localJobs = JobStorage.getAllJobs();
+  const allGigs = [...DemoGigs, ...localJobs];
+
+  const getRelevantProjects = (job) => {
+  return portfolio.filter((project) =>
+    project.technologies.some((tech) => job.skills.includes(tech))
+  );
+};
+
+const handleApplyJobs = (job) => {
+  const relevant = getRelevantProjects(job);
+  
+  if (relevant.length === 0) {
+    alert("No matching projects found in your portfolio for this job.");
+    return;
   }
-];
- const localJobs = JobStorage.getAllJobs();
- const allGigs = [...DemoGigs, ...localJobs];
+}
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 relative overflow-hidden">
@@ -181,7 +281,7 @@ const FreelancerDashboard = () => {
         backgroundImage: `radial-gradient(circle at 25px 25px, rgba(209, 250, 229, 0.4) 2px, transparent 0)`,
         backgroundSize: '50px 50px'
       }}></div>
-      
+
       {/* Enhanced Navigation */}
       <nav className="bg-white/10 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-lg shadow-emerald-500/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -200,7 +300,7 @@ const FreelancerDashboard = () => {
                 variant="ghost"
                 size="sm"
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="relative bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20"
+                className="cursor-pointerrelative bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20"
               >
                 <Bell className="h-4 w-4" />
                 {notifications.length > 0 && (
@@ -209,44 +309,44 @@ const FreelancerDashboard = () => {
                   </span>
                 )}
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => {}} className="bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20">
+              <Button variant="ghost" size="sm" onClick={() => { }} className="bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20">
                 <Settings className="h-4 w-4" />
               </Button>
               {/* 🔔 Notifications Dropdown */}
-                {showNotifications && (
-                  createPortal(
-                    <div className="fixed right-6 top-20 w-80 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 z-[99999] pointer-events-auto">
-                      <div className="p-4 border-b border-gray-200 font-semibold text-slate-900">
-                        Notifications
-                      </div>
-                      <div className="max-h-80 overflow-y-auto">
-                        {notifications.map((n) => (
-                          <div
-                            key={n.id}
-                            className="p-4 border-b border-gray-100 hover:bg-gray-50 transition"
-                          >
-                            <p className="text-sm font-medium text-slate-800">
-                              {n.client}
-                            </p>
-                            <p className="text-xs text-slate-600">{n.description}</p>
-                            <div className="flex justify-between mt-1">
-                              <span className="text-emerald-600 text-sm font-semibold">
-                                ${n.amount}
-                              </span>
-                              <span className="text-gray-400 text-xs">{n.time}</span>
-                            </div>
+              {showNotifications && (
+                createPortal(
+                  <div className="fixed right-6 top-20 w-80 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 z-[99999] pointer-events-auto">
+                    <div className="p-4 border-b border-gray-200 font-semibold text-slate-900">
+                      Notifications
+                    </div>
+                    <div className="max-h-80 overflow-y-auto">
+                      {notifications.map((n) => (
+                        <div
+                          key={n.id}
+                          className="p-4 border-b border-gray-100 hover:bg-gray-50 transition"
+                        >
+                          <p className="text-sm font-medium text-slate-800">
+                            {n.client}
+                          </p>
+                          <p className="text-xs text-slate-600">{n.description}</p>
+                          <div className="flex justify-between mt-1">
+                            <span className="text-emerald-600 text-sm font-semibold">
+                              ${n.amount}
+                            </span>
+                            <span className="text-gray-400 text-xs">{n.time}</span>
                           </div>
-                        ))}
-                      </div>
-                    </div>,
-                    document.body
-                  )
-                )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>,
+                  document.body
+                )
+              )}
             </div>
           </div>
         </div>
       </nav>
-      
+
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Dashboard Header */}
         <div className="mb-8">
@@ -259,10 +359,6 @@ const FreelancerDashboard = () => {
                 <p className="text-slate-600 text-lg">Grow your freelance business and showcase your talent</p>
               </div>
               <div className="hidden md:flex space-x-4">
-                <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create Gig
-                </Button>
                 <Button variant="outline" className="bg-white/30 backdrop-blur-sm border-white/30 hover:bg-white/40">
                   <Edit className="h-4 w-4 mr-2" />
                   Edit Profile
@@ -289,11 +385,10 @@ const FreelancerDashboard = () => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveView(tab.id)}
-                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${
-                      activeView === tab.id
-                        ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg'
-                        : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
-                    }`}
+                    className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 rounded-xl font-medium transition-all duration-300 ${activeView === tab.id
+                      ? 'bg-gradient-to-r from-emerald-600 to-teal-600 text-white shadow-lg'
+                      : 'text-slate-600 hover:text-slate-800 hover:bg-white/30'
+                      }`}
                   >
                     <IconComponent className="h-4 w-4" />
                     <span className="hidden sm:inline">{tab.label}</span>
@@ -363,7 +458,7 @@ const FreelancerDashboard = () => {
                     <Plus className="h-4 w-4 mr-2" />
                     Create New Gig
                   </Button>
-                  <Button 
+                  <Button
                     onClick={() => setActiveView('portfolio')}
                     className="w-full justify-start bg-white/30 backdrop-blur-sm hover:bg-white/40 text-slate-700 border border-white/30"
                   >
@@ -462,7 +557,7 @@ const FreelancerDashboard = () => {
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-slate-900">My Portfolio</h2>
-              <Button 
+              <Button
                 onClick={() => setShowAddPortfolio(true)}
                 className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
               >
@@ -477,33 +572,33 @@ const FreelancerDashboard = () => {
                 <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 p-6 max-w-md w-full">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-xl font-bold text-slate-900">Add Portfolio Item</h3>
-                    <Button 
-                      variant="ghost" 
-                      size="sm" 
+                    <Button
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setShowAddPortfolio(false)}
                       className="text-slate-500 hover:text-slate-700"
                     >
                       <X className="h-4 w-4" />
                     </Button>
                   </div>
-                  
+
                   <form onSubmit={handleAddPortfolio} className="space-y-4">
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Project Title</label>
                       <Input
                         placeholder="My awesome project"
                         value={newPortfolioItem.title}
-                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, title: e.target.value})}
+                        onChange={(e) => setNewPortfolioItem({ ...newPortfolioItem, title: e.target.value })}
                         className="bg-white/50 backdrop-blur-sm border-white/30"
                         required
                       />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Category</label>
-                      <select 
+                      <select
                         value={newPortfolioItem.category}
-                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, category: e.target.value})}
+                        onChange={(e) => setNewPortfolioItem({ ...newPortfolioItem, category: e.target.value })}
                         className="w-full h-10 bg-white/50 backdrop-blur-sm border border-white/30 rounded-md px-3"
                         required
                       >
@@ -515,42 +610,42 @@ const FreelancerDashboard = () => {
                         <option value="Content Writing">Content Writing</option>
                       </select>
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Description</label>
                       <textarea
                         placeholder="Describe your project..."
                         value={newPortfolioItem.description}
-                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, description: e.target.value})}
+                        onChange={(e) => setNewPortfolioItem({ ...newPortfolioItem, description: e.target.value })}
                         className="w-full h-20 bg-white/50 backdrop-blur-sm border border-white/30 rounded-md px-3 py-2 resize-none"
                         required
                       />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Technologies (comma-separated)</label>
                       <Input
                         placeholder="React, Node.js, MongoDB"
                         value={newPortfolioItem.technologies}
-                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, technologies: e.target.value})}
+                        onChange={(e) => setNewPortfolioItem({ ...newPortfolioItem, technologies: e.target.value })}
                         className="bg-white/50 backdrop-blur-sm border-white/30"
                         required
                       />
                     </div>
-                    
+
                     <div>
                       <label className="block text-sm font-semibold text-slate-700 mb-2">Project Link (Optional)</label>
                       <Input
                         type="url"
                         placeholder="https://example.com"
                         value={newPortfolioItem.link}
-                        onChange={(e) => setNewPortfolioItem({...newPortfolioItem, link: e.target.value})}
+                        onChange={(e) => setNewPortfolioItem({ ...newPortfolioItem, link: e.target.value })}
                         className="bg-white/50 backdrop-blur-sm border-white/30"
                       />
                     </div>
-                    
+
                     <div className="flex space-x-3 pt-4">
-                      <Button 
+                      <Button
                         type="button"
                         onClick={() => setShowAddPortfolio(false)}
                         variant="outline"
@@ -558,7 +653,7 @@ const FreelancerDashboard = () => {
                       >
                         Cancel
                       </Button>
-                      <Button 
+                      <Button
                         type="submit"
                         className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600"
                       >
@@ -575,8 +670,8 @@ const FreelancerDashboard = () => {
               {portfolio.map((item) => (
                 <div key={item.id} className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 overflow-hidden hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300 group">
                   <div className="aspect-video bg-slate-200 overflow-hidden">
-                    <img 
-                      src={item.image} 
+                    <img
+                      src={item.image}
                       alt={item.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -595,15 +690,15 @@ const FreelancerDashboard = () => {
                         </Button>
                       </div>
                     </div>
-                    
+
                     <h3 className="font-semibold text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
                       {item.title}
                     </h3>
-                    
+
                     <p className="text-slate-600 text-sm mb-4 line-clamp-2">
                       {item.description}
                     </p>
-                    
+
                     <div className="flex flex-wrap gap-1 mb-4">
                       {item.technologies.slice(0, 3).map((tech, index) => (
                         <Badge key={index} variant="secondary" className="text-xs bg-white/40 backdrop-blur-sm">
@@ -616,7 +711,7 @@ const FreelancerDashboard = () => {
                         </Badge>
                       )}
                     </div>
-                    
+
                     {item.link && (
                       <Button size="sm" variant="outline" className="w-full bg-white/30 backdrop-blur-sm border-white/30">
                         <Globe className="h-3 w-3 mr-2" />
@@ -631,19 +726,27 @@ const FreelancerDashboard = () => {
         )}
 
         {/* Skills Tab */}
+        {/* Skills Tab */}
         {activeView === 'skills' && (
           <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-bold text-slate-900">My Skills</h2>
-              <Button className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700">
+              <Button
+                onClick={() => setShowAddSkills(true)}
+                className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Add Skill
               </Button>
             </div>
 
+            {/* Skills grid */}
             <div className="grid md:grid-cols-2 gap-6">
               {skills.map((skill, index) => (
-                <div key={index} className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300">
+                <div
+                  key={index}
+                  className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300"
+                >
                   <div className="flex items-center justify-between mb-4">
                     <div>
                       <h3 className="font-semibold text-slate-900 text-lg">{skill.name}</h3>
@@ -653,25 +756,92 @@ const FreelancerDashboard = () => {
                       <p className="text-xs text-slate-500">{skill.projects} projects</p>
                     </div>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <div className="w-full bg-white/30 rounded-full h-3">
-                      
-                      <div className="flex space-x-2">
-                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0 hover:bg-white/30">
-                          <Edit className="h-3 w-3" />
-                        </Button>
-                        <Button size="sm" variant="ghost" className="h-6 w-6 p-0 hover:bg-white/30 text-red-500">
-                          <Trash2 className="h-3 w-3" />
-                        </Button>
-                      </div>
-                    </div>
+
+                  {/* Progress bar */}
+                  <div className="w-full bg-white/30 rounded-full h-3 overflow-hidden">
+                    <div
+                      className={`h-3 bg-gradient-to-r ${skill.color}`}
+                      style={{ width: `${skill.level}%` }}
+                    ></div>
+                  </div>
+
+                  <div className="flex space-x-2 mt-3">
+                    <Button size="sm" variant="ghost" className="h-6 w-6 p-0 hover:bg-white/30" onClick = {() => editSkill(index)} >
+                      <Edit className="h-3 w-3" />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="h-6 w-6 p-0 hover:bg-white/30 text-red-500"
+                      onClick = {() => deleteSkill(index)}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
                   </div>
                 </div>
               ))}
             </div>
+
+            {/* Skill Modal goes here */}
+            {showAddSkills && (
+              <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 p-6 max-w-md w-full">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-xl font-bold text-slate-900">Add Skill</h3>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowAddSkills(false)}
+                      className="text-slate-500 hover:text-slate-700"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  <form onSubmit={handleSkill} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-slate-700 mb-2">
+                        Search or Add Skill
+                      </label>
+                      <input
+                        type="text"
+                        list="skills-list"
+                        placeholder="e.g. React, Node.js..."
+                        value={newSkill}
+                        onChange={(e) => setNewSkill(e.target.value)}
+                        className="w-full h-10 bg-white/50 backdrop-blur-sm border border-white/30 rounded-md px-3"
+                        required
+                      />
+                      <datalist id="skills-list">
+                        {availableSkills.map((s, i) => (
+                          <option key={i} value={s} />
+                        ))}
+                      </datalist>
+                    </div>
+
+                    <div className="flex space-x-3 pt-4">
+                      <Button
+                        type="button"
+                        onClick={() => setShowAddSkills(false)}
+                        variant="outline"
+                        className="flex-1 bg-white/50 backdrop-blur-sm border-white/30"
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        className="flex-1 bg-gradient-to-r from-emerald-600 to-teal-600"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
           </div>
         )}
+
 
         {/* Earnings Tab */}
         {activeView === 'earnings' && (
@@ -684,13 +854,13 @@ const FreelancerDashboard = () => {
                 </div>
                 <p className="text-sm text-green-600">+38% from last month</p>
               </div>
-              
+
               <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6">
                 <h3 className="text-lg font-semibold text-slate-900 mb-4">All Time</h3>
                 <div className="text-3xl font-bold text-slate-900 mb-2">$47,350</div>
                 <p className="text-sm text-slate-600">Total earnings</p>
               </div>
-              
+
               <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6">
                 <h3 className="text-lg font-semibold text-slate-900 mb-4">Available</h3>
                 <div className="text-3xl font-bold text-blue-600 mb-2">$2,800</div>
@@ -730,32 +900,42 @@ const FreelancerDashboard = () => {
         )}
       </div>
       {activeView === 'find_gigs' && (
-  <div className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-8 mb-8">
-    <h2 className="text-3xl font-bold text-emerald-700 mb-8">Available Gigs</h2>
-    <div className="space-y-8 max-h-[600px] overflow-y-auto pr-2">
-      {allGigs.map(gig => (
+  <div className="space-y-6">
+    <div className="flex items-center justify-between">
+      <h2 className="text-2xl font-bold text-slate-900">Find Gigs</h2>
+    </div>
+
+    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {allGigs.map((gig) => (
         <div
           key={gig.id}
-          className="p-6 bg-white rounded-2xl shadow-md flex flex-col sm:flex-row justify-between items-start gap-6 hover:shadow-lg transition-shadow border border-green-100"
+          className="bg-white/20 backdrop-blur-xl rounded-2xl shadow-xl border border-white/30 p-6 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300"
         >
-          <div className="flex flex-col flex-grow">
-            <h3 className="text-xl font-semibold text-green-800 mb-2">{gig.title}</h3>
-            <p className="text-green-700 mb-1">
-              <span className="font-medium">{gig.category}</span> &mdash; Budget: <span className="font-semibold">${gig.budget}</span> &mdash; Duration: {gig.timeline}
-            </p>
-            <p className="text-green-600 text-sm mb-1">Client: {gig.client}</p>
-            <p className="text-green-500 text-xs italic">Posted {gig.postedAgo}</p>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="font-semibold text-slate-900">{gig.title}</h3>
+            <Badge className="bg-emerald-100/80 text-emerald-800 text-xs">{gig.category}</Badge>
           </div>
-          <div className="flex-shrink-0">
-            <button className="px-6 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold rounded-2xl hover:from-emerald-700 hover:to-teal-700 transition">
+
+          <p className="text-sm text-slate-600 mb-2">Client: {gig.client}</p>
+          {gig.budget && <p className="text-sm text-slate-600 mb-2">Budget: ${gig.budget}</p>}
+          {gig.timeline && <p className="text-sm text-slate-600 mb-2">Timeline: {gig.timeline}</p>}
+          {gig.postedAgo && <p className="text-xs text-gray-500">Posted: {gig.postedAgo}</p>}
+
+          <div className="mt-4">
+            <Button
+              size="sm"
+              onClick = {() => handleApplyJobs(job)}
+              className="w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
+            >
               Apply Now
-            </button>
+            </Button>
           </div>
         </div>
       ))}
     </div>
   </div>
 )}
+
 
     </div>
   );
