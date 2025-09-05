@@ -6,6 +6,8 @@ import { Button } from "../../components/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/Avatar";
 import { Badge } from "../../components/Badge";
 import { Input } from "../../components/Input";
+import { JobStorage } from "../../../Utils/Jobstorage";
+import {createPortal} from "react-dom";
 
 const FreelancerDashboard = () => {
   const { user } = useAuth();
