@@ -1,4 +1,4 @@
-import { BarChart3, Briefcase, DollarSign, Edit, Folder, Globe, Grid3X3, MessageSquare, Plus, Settings, Star, Target, Trash2, TrendingUp, Upload, X, Zap } from "lucide-react";
+import { BarChart3, Bell, Briefcase, DollarSign, Edit, Folder, Globe, Grid3X3, MessageSquare, Plus, Settings, Star, Target, Trash2, TrendingUp, Upload, X, Zap } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
 import { Link } from "react-router-dom";
@@ -6,7 +6,6 @@ import { Button } from "../../components/Button";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/Avatar";
 import { Badge } from "../../components/Badge";
 import { Input } from "../../components/Input";
-import { JobStorage } from "../../../Utils/Jobstorage";
 
 const FreelancerDashboard = () => {
   const { user } = useAuth();
@@ -83,6 +82,32 @@ const FreelancerDashboard = () => {
       link: "https://example.com"
     }
   ]);
+
+  // 🔔 Notifications
+    const [showNotifications, setShowNotifications] = useState(false);
+    const [notifications] = useState([
+      {
+        id: 1,
+        client: "TechCorp Inc.",
+        description: "Need a landing page redesign with payment integration",
+        amount: 1200,
+        time: "2h ago",
+      },
+      {
+        id: 2,
+        client: "StartupXYZ",
+        description: "Mobile app design system required",
+        amount: 800,
+        time: "1d ago",
+      },
+      {
+        id: 3,
+        client: "Creative Co.",
+        description: "Brand identity and logo package",
+        amount: 500,
+        time: "3d ago",
+      },
+    ]);
 
   const [showAddPortfolio, setShowAddPortfolio] = useState(false);
   const [newPortfolioItem, setNewPortfolioItem] = useState({
@@ -169,9 +194,52 @@ const FreelancerDashboard = () => {
                 <Zap className="h-4 w-4 text-emerald-600" />
                 <span className="text-slate-700 font-medium">{user?.name}</span>
               </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowNotifications(!showNotifications)}
+                className="relative bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20"
+              >
+                <Bell className="h-4 w-4" />
+                {notifications.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                    {notifications.length}
+                  </span>
+                )}
+              </Button>
               <Button variant="ghost" size="sm" onClick={() => {}} className="bg-white/20 backdrop-blur-sm hover:bg-white/30 border border-white/20">
                 <Settings className="h-4 w-4" />
               </Button>
+              {/* 🔔 Notifications Dropdown */}
+                {showNotifications && (
+                  createPortal(
+                    <div className="fixed right-6 top-20 w-80 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/30 z-[99999] pointer-events-auto">
+                      <div className="p-4 border-b border-gray-200 font-semibold text-slate-900">
+                        Notifications
+                      </div>
+                      <div className="max-h-80 overflow-y-auto">
+                        {notifications.map((n) => (
+                          <div
+                            key={n.id}
+                            className="p-4 border-b border-gray-100 hover:bg-gray-50 transition"
+                          >
+                            <p className="text-sm font-medium text-slate-800">
+                              {n.client}
+                            </p>
+                            <p className="text-xs text-slate-600">{n.description}</p>
+                            <div className="flex justify-between mt-1">
+                              <span className="text-emerald-600 text-sm font-semibold">
+                                ${n.amount}
+                              </span>
+                              <span className="text-gray-400 text-xs">{n.time}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>,
+                    document.body
+                  )
+                )}
             </div>
           </div>
         </div>
