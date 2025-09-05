@@ -4,6 +4,372 @@ import { Input } from "../components/Input";
 import { ArrowLeft, ArrowRight, Clock, DollarSign, Send, Upload } from "lucide-react";
 import { Button } from "../components/Button";
 import { JobStorage } from "../../Utils/Jobstorage";
+import { ethers } from "ethers";
+
+const abi = [
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_jobId",
+				"type": "uint256"
+			}
+		],
+		"name": "approveExtension",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_jobId",
+				"type": "uint256"
+			}
+		],
+		"name": "approveWork",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address payable",
+				"name": "_freelancer",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_deadline",
+				"type": "uint256"
+			}
+		],
+		"name": "createJob",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_platformWallet",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_platformFee",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "jobId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "newDeadline",
+				"type": "uint256"
+			}
+		],
+		"name": "ExtensionApproved",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "jobId",
+				"type": "uint256"
+			}
+		],
+		"name": "ExtensionRejected",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "jobId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "newDeadline",
+				"type": "uint256"
+			}
+		],
+		"name": "ExtensionRequested",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "jobId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "freelancerAmount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "platformFee",
+				"type": "uint256"
+			}
+		],
+		"name": "JobApproved",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "jobId",
+				"type": "uint256"
+			}
+		],
+		"name": "JobCancelled",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "jobId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "client",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "address",
+				"name": "freelancer",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "JobCreated",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "uint256",
+				"name": "jobId",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "refundAmount",
+				"type": "uint256"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "platformFee",
+				"type": "uint256"
+			}
+		],
+		"name": "JobRejected",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_jobId",
+				"type": "uint256"
+			}
+		],
+		"name": "rejectExtension",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_jobId",
+				"type": "uint256"
+			}
+		],
+		"name": "rejectWork",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_jobId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_newDeadline",
+				"type": "uint256"
+			}
+		],
+		"name": "requestExtension",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"stateMutability": "payable",
+		"type": "receive"
+	},
+	{
+		"inputs": [],
+		"name": "jobCounter",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "jobs",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "id",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address payable",
+				"name": "client",
+				"type": "address"
+			},
+			{
+				"internalType": "address payable",
+				"name": "freelancer",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "deadline",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "funded",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "completed",
+				"type": "bool"
+			},
+			{
+				"internalType": "bool",
+				"name": "cancelled",
+				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "proposedDeadline",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "extensionRequested",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "platformFee",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "platformWallet",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+
+const CONTRACT_ADDRESS = "0xf5eE7E0B21B0b84E7025F458098c357e1Db29A9c";
+
+
+const DEFAULT_FREELANCER = "0x9351fe5bE069352CDFE3A87AE3AFb652AA6d02a0";
+
 
 const PostJobPage = () => {
   const [jobData, setJobData] = useState({
@@ -48,33 +414,86 @@ const PostJobPage = () => {
   const NextStep = () => setCurrentStep(prev => Math.min(prev + 1, 3));
   const PrevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    const result = JobStorage.saveJob(jobData);
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if( result.success ){
-      alert("Job posted successfully!");
-      setIsSubmitting(false);
-      setJobData({
-        title: "",
-        category: "",
-        subcategory: "",
-        description: "",
-        skills: [],
-        budget: "",
-        budgetType: "fixed",
-        timeline: "",
-        experience: "",
-        attachments: []
-      });
-      setCurrentStep(1);
-    } else {
-      setIsSubmitting(false);
-      alert("submission failed");
-    }
-    
-  };
+  // basic validation
+  if (!jobData.budget || isNaN(jobData.budget)) {
+    alert("Please enter a valid budget in ETH.");
+    return;
+  }
+  if (!window.ethereum) {
+    alert("MetaMask not detected. Please install/enable it.");
+    return;
+  }
+
+  setIsSubmitting(true);
+
+  try {
+    // 1) Connect to MetaMask
+    const provider = new ethers.BrowserProvider(window.ethereum);
+    await provider.send("eth_requestAccounts", []);
+    const signer = await provider.getSigner();
+
+    // 2) Build contract instance
+    const contract = new ethers.Contract(
+      CONTRACT_ADDRESS,
+      abi,
+      signer
+    );
+
+    // 3) Compute a deadline from your timeline dropdown (simple mapping)
+    const timelineDaysMap = {
+      "ASAP (1-3 days)": 3,
+      "Within a week": 7,
+      "Within a month": 30,
+      "1-3 months": 90,
+      "Flexible": 30, // fallback
+    };
+    const days = timelineDaysMap[jobData.timeline] || 7;
+    const deadline = Math.floor(Date.now() / 1000) + days * 24 * 60 * 60;
+
+    // 4) Budget in ETH -> wei
+    const value = ethers.parseEther(jobData.budget.toString());
+
+    // 5) Call createJob (value is the escrow deposit)
+    const tx = await contract.createJob(DEFAULT_FREELANCER, deadline, { value });
+
+    // MetaMask popup → wait for confirmation
+    await tx.wait();
+
+    // Optional: also keep your local storage save
+    try {
+      const result = JobStorage.saveJob(jobData);
+      if (!result?.success) console.warn("Local save failed (non-blocking).");
+    } catch (_) {}
+
+    alert("✅ Job posted on-chain and funds escrowed!");
+
+    // reset form
+    setJobData({
+      title: "",
+      category: "",
+      subcategory: "",
+      description: "",
+      skills: [],
+      budget: "",
+      budgetType: "fixed",
+      timeline: "",
+      experience: "",
+      attachments: []
+    });
+    setCurrentStep(1);
+  } catch (err) {
+    console.error(err);
+    // ethers v6 errors usually have .shortMessage or .message
+    const msg = err?.shortMessage || err?.message || String(err);
+    alert(`❌ Job submission failed:\n${msg}`);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-green-50 relative overflow-hidden font-sans">
@@ -340,3 +759,4 @@ const PostJobPage = () => {
 };
 
 export default PostJobPage;
+
