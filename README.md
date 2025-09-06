@@ -1,6 +1,6 @@
 # Safelance 🛡️
 
-**Safelance** is a **Web3-powered freelance escrow platform** built on **Polygon** that ensures **trust, transparency, and secure payments** between clients and freelancers.  
+**Safelance** is a **Web3-powered freelance escrow platform** built on **Ethereum** that ensures **trust, transparency, and secure payments** between clients and freelancers.  
 By leveraging **smart contracts**, Safelance automates payments, manages disputes, and protects both parties in the freelancing lifecycle.  
 
 ---
