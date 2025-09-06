@@ -65,10 +65,11 @@ By leveraging **smart contracts**, Safelance automates payments, manages dispute
 ```bash
 git clone https://github.com/your-username/safelance.git
 cd safelance
+```
 ### 2. Install Dependencies
 ```bash
 npm install
-
+```
 ---
 
 ## 🔒 Security Features
