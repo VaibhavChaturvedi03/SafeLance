@@ -358,5 +358,4 @@ abi=[
 		"type": "function"
 	}
 ]
-
 address = 0xf5eE7E0B21B0b84E7025F458098c357e1Db29A9c
