@@ -5,6 +5,13 @@ By leveraging **smart contracts**, Safelance automates payments, manages dispute
 
 ---
 
+![Solidity](https://img.shields.io/badge/Solidity-^0.8.19-363636?logo=solidity)  
+![Ethereum](https://img.shields.io/badge/Ethereum-ETH-3C3C3D?logo=ethereum)  
+![Hardhat](https://img.shields.io/badge/Hardhat-Eth%20Dev-yellow?logo=hardhat)  
+![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+
+---
+
 ## 🚀 Features
 
 - 🔒 **Escrow Payments** – Funds are securely locked in smart contracts until job completion.  
@@ -58,4 +65,36 @@ By leveraging **smart contracts**, Safelance automates payments, manages dispute
 ```bash
 git clone https://github.com/your-username/safelance.git
 cd safelance
+### 2. Install Dependencies
+```bash
+npm install
+
+---
+
+## 🔒 Security Features
+- Escrow smart contracts ensure funds can’t be misused  
+- IPFS prevents access to deliverables before approval  
+- Admin/multisig wallet ensures fair dispute resolution  
+
+## ⚠️ Challenges We Faced
+- Designing robust escrow logic with multiple states (*created, accepted, submitted, approved, canceled, disputed*)  
+- Handling deadline extensions without breaking lifecycle flow  
+- Fixing ethers.js decimal errors with `parseEther`  
+- Optimizing gas usage using structs + mappings  
+
+## 📌 Future Roadmap
+- DAO-based community dispute resolution  
+- Integration of stablecoins (USDC, DAI) alongside ETH  
+- Decentralized frontend hosting (IPFS/Arweave)  
+- On-chain reputation scoring for freelancers & clients  
+
+## 👨‍💻 Contributors
+- **[Vaibhav Chaturvedi](https://github.com/vaibhavchaturvedi)** – Smart Contracts
+- **[Pratham Jain](https://github.com/pratham27-pro)** – Full Stack Development  
+- **[Priyanshi Sharma](https://github.com/priyanshisharma3)** – UI/UX & Frontend  
+- **[Ujjwal Yadav](https://github.com/Ujjwal5353t)** – Frontend Development  
+ 
+
+## 📜 License
+Safelance is licensed under the **MIT License**.  
 
