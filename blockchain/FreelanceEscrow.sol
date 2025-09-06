@@ -11,10 +11,6 @@ contract FreelanceEscrow {
         bool funded;
         bool completed;
         bool cancelled;
-
-        // Extension logic
-        uint256 proposedDeadline;
-        bool extensionRequested;
     }
 
     address public platformWallet;
@@ -27,11 +23,6 @@ contract FreelanceEscrow {
     event JobApproved(uint256 indexed jobId, uint256 freelancerAmount, uint256 platformFee);
     event JobRejected(uint256 indexed jobId, uint256 refundAmount, uint256 platformFee);
     event JobCancelled(uint256 indexed jobId);
-
-    // Extension events
-    event ExtensionRequested(uint256 indexed jobId, uint256 newDeadline);
-    event ExtensionApproved(uint256 indexed jobId, uint256 newDeadline);
-    event ExtensionRejected(uint256 indexed jobId);
 
     constructor(address _platformWallet, uint256 _platformFee) {
         platformWallet = _platformWallet;
@@ -51,51 +42,10 @@ contract FreelanceEscrow {
             deadline: _deadline,
             funded: true,
             completed: false,
-            cancelled: false,
-            proposedDeadline: 0,
-            extensionRequested: false
+            cancelled: false
         });
 
         emit JobCreated(jobCounter, msg.sender, _freelancer, msg.value);
-    }
-
-    // Freelancer requests an extension
-    function requestExtension(uint256 _jobId, uint256 _newDeadline) external {
-        Job storage job = jobs[_jobId];
-        require(msg.sender == job.freelancer, "Only freelancer can request");
-        require(job.funded, "Job not funded");
-        require(!job.completed, "Already completed");
-        require(!job.cancelled, "Job cancelled");
-        require(_newDeadline > job.deadline, "New deadline must be later");
-
-        job.proposedDeadline = _newDeadline;
-        job.extensionRequested = true;
-
-        emit ExtensionRequested(_jobId, _newDeadline);
-    }
-
-    // Client approves the extension
-    function approveExtension(uint256 _jobId) external {
-        Job storage job = jobs[_jobId];
-        require(msg.sender == job.client, "Only client can approve");
-        require(job.extensionRequested, "No extension requested");
-
-        job.deadline = job.proposedDeadline;
-        job.extensionRequested = false;
-
-        emit ExtensionApproved(_jobId, job.deadline);
-    }
-
-    // Client rejects the extension
-    function rejectExtension(uint256 _jobId) external {
-        Job storage job = jobs[_jobId];
-        require(msg.sender == job.client, "Only client can reject");
-        require(job.extensionRequested, "No extension requested");
-
-        job.proposedDeadline = 0;
-        job.extensionRequested = false;
-
-        emit ExtensionRejected(_jobId);
     }
 
     // Client approves work -> pay freelancer (98%) and platform (2%)
