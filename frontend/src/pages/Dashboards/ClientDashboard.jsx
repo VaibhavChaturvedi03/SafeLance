@@ -1,25 +1,26 @@
-import { BarChart3, Briefcase, DollarSign, Edit, Settings, User, Users, Award, Plus, MessageSquare, Search } from "lucide-react";
+import { BarChart3, Briefcase, DollarSign, Edit, Settings, User, Users, Award, Plus, MessageSquare, Search, ImportIcon } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthProvider";
 import { Link } from "react-router-dom";
 import { Button } from "../../components/Button";
 import { Badge } from "../../components/Badge";
 import { Avatar, AvatarFallback, AvatarImage } from "../../components/Avatar";
+import ProjectMilestoneModal from "../../components/ProjectMilestoneModal";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
   const [activeView, setActiveView] = useState("overview");
-  const [activeProjects] = useState([
+  const [activeProjects , setActiveProjects] = useState([
     {
       id: 1,
       title: "E-commerce Website Development",
       freelancer: "Sarah Johnson",
       freelancerAvatar:
         "https://images.unsplash.com/photo-1635768229592-8c2532d33cb7?w=100&h=100&fit=crop&crop=face",
-      progress: 85,
-      status: "In Progress",
-      budget: 2500,
-      spent: 1800,
+      progress: 0,
+      status : "In Progress",
+      budget: 0.001,
+      spent: 0,
       deadline: "2025-02-15",
       description: "Modern e-commerce platform with payment integration",
     },
@@ -30,7 +31,7 @@ const ClientDashboard = () => {
       freelancerAvatar:
         "https://images.unsplash.com/photo-1755352425808-b8223a330f15?w=100&h=100&fit=crop&crop=face",
       progress: 100,
-      status: "Completed",
+      status : "Completed",
       budget: 1800,
       spent: 1800,
       deadline: "2025-01-28",
@@ -43,7 +44,7 @@ const ClientDashboard = () => {
       freelancerAvatar:
         "https://images.unsplash.com/photo-1739287088635-444554e7ac0e?w=100&h=100&fit=crop&crop=face",
       progress: 60,
-      status: "In Progress",
+      status : "In Progress",
       budget: 1200,
       spent: 720,
       deadline: "2025-02-20",
@@ -51,17 +52,33 @@ const ClientDashboard = () => {
     },
   ]);
 
-const GetStatusColor = (status) => {
-  switch (status) {
-    case "Completed":
-      return "bg-emerald-100/80 text-emerald-800";
-    case "In Progress":
-      return "bg-blue-100/80 text-blue-800";
-    case "In Review":
-      return "bg-yellow-100/80 text-yellow-800";
-    default:
-      return "bg-gray-100/80 text-gray-800";
+  const [selectedProject , setSelectedProject] = useState(null);
+
+  const GetStatusColor = (status) => {
+    switch (status) {
+      case "Completed":
+        return "bg-emerald-100/80 text-emerald-800";
+      case "In Progress":
+        return "bg-blue-100/80 text-blue-800";
+      case "In Review":
+        return "bg-yellow-100/80 text-yellow-800";
+      default:
+        return "bg-gray-100/80 text-gray-800";
+    }
+  };
+
+  const handleUpdateProject = (updatedProject) => {
+  
+  if( updatedProject.progress === 100 ){
+    updatedProject.status = "Completed";
+  } else{
+    updatedProject.status = "In Progress"
   }
+  
+    setActiveProjects((prev) =>
+    prev.map((p) => (p.id === updatedProject.id ? updatedProject : p))
+  );
+  setSelectedProject(updatedProject); 
 };
 
 
@@ -148,11 +165,10 @@ const GetStatusColor = (status) => {
               <button
                 key={tab.id}
                 onClick={() => setActiveView(tab.id)}
-                className={`flex-1 rounded-xl flex items-center gap-2 justify-center py-3 font-semibold transition ${
-                  activeView === tab.id
+                className={`flex-1 rounded-xl flex items-center gap-2 justify-center py-3 font-semibold transition ${activeView === tab.id
                     ? "bg-emerald-700 text-white shadow-lg"
                     : "text-slate-600 hover:text-emerald-700 hover:bg-emerald-50"
-                }`}
+                  }`}
               >
                 <Icon className="h-5 w-5" />
                 <span className="hidden sm:inline">{tab.label}</span>
@@ -160,6 +176,16 @@ const GetStatusColor = (status) => {
             );
           })}
         </nav>
+
+      
+      {/* Milestone Modal */}
+      {selectedProject && (
+        <ProjectMilestoneModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+          onUpdate={handleUpdateProject}
+        />
+      )}
 
         {/* Tab Content */}
         {activeView === "overview" && (
@@ -228,6 +254,40 @@ const GetStatusColor = (status) => {
             </div>
           </section>
         )}
+
+        {activeView === "projects" && (
+          <section className="space-y-6 cursor-pointer">
+            <h2 className="text-2xl font-bold text-emerald-700">Active Projects</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {activeProjects.map((project) => (
+                <div
+                  key={project.id}
+                  className="bg-white rounded-2xl shadow-md border border-green-100 p-6 flex flex-col"
+                  onClick={() => setSelectedProject(project)}
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <Avatar>
+                      <AvatarImage src={project.freelancerAvatar} />
+                      <AvatarFallback>{project.freelancer[0]}</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h3 className="font-semibold text-green-700">{project.title}</h3>
+                      <p className="text-sm text-slate-500">by {project.freelancer}</p>
+                    </div>
+                  </div>
+                  <p className="text-sm text-slate-600 mb-4">{project.description}</p>
+                  <div className="flex items-center justify-between mt-auto">
+                    <Badge className={GetStatusColor(project.status)}>
+                      {project.status}
+                    </Badge>
+                    <span className="text-xs text-slate-500">Due {project.deadline}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
 
       </div>
     </div>
